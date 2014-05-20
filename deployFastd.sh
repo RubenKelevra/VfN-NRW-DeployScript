@@ -1,17 +1,24 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-        echo "Please enter an Hardware-ID as first argument and a Member-ID as second."
+        echo "Please enter an Hardware-ID as first argument and a Member-ID as second and the expected community as third."
         exit 1
 fi
 
 if [ -z "$2" ]; then
-        echo "Please enter an Hardware-ID as first argument and a Member-ID as second."
+	echo "Please enter an Hardware-ID as first argument and a Member-ID as second and the expected community as third."
         exit 1
 fi
 
+if [ -z "$3" ]; then
+        echo "Please enter an Hardware-ID as first argument and a Member-ID as second and the expected community as third."
+        exit 1
+fi
+
+
 HWID=$1
 MemberID=$2
+COMMUNITY_EXPECTED=$3
 
 #Format MemberID
 MemberID=$(echo $MemberID | tr ' ' '_')
@@ -37,7 +44,12 @@ if [ -z "$KEY" ]; then
         exit 1
 fi
 
-$DIR="/etc/fastd/$COMMUNITY/nodes/"
+if [ "$COMMUNITY" != "$COMMUNITY_EXPECTED" ]; then
+	echo "Error: Server said community is $COMMUNITY, you entered $COMMUNITY_EXPECTED, you have to fix the database."
+	exit 1
+fi
+
+DIR="/etc/fastd/$COMMUNITY/nodes/"
 
 if [ ! -d "$DIR" ]; then
 	echo "Error: we can't locate the folder for the keyfiles"
