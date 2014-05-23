@@ -1,30 +1,20 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-        echo "Please enter an Hardware-ID as first argument and a Member-ID as second and the expected community as third."
+        echo "Please enter an Hardware-ID as first and the expected community as second argument."
         exit 1
 fi
 
 if [ -z "$2" ]; then
-	echo "Please enter an Hardware-ID as first argument and a Member-ID as second and the expected community as third."
+	echo "Please enter an Hardware-ID as first and the expected community as second argument."
         exit 1
 fi
-
-if [ -z "$3" ]; then
-        echo "Please enter an Hardware-ID as first argument and a Member-ID as second and the expected community as third."
-        exit 1
-fi
-
 
 HWID=$1
-MemberID=$2
-COMMUNITY_EXPECTED=$3
-
-#Format MemberID
-MemberID=$(echo $MemberID | tr ' ' '_')
+COMMUNITY_EXPECTED=$2
 
 #Fetch from Server
-RESPONSE=$(curl http://freifunk.liztv.net/api/fastd-key.php?hwid=$HWID)
+RESPONSE=$(curl -sS http://freifunk.liztv.net/api/fastd-key.php?hwid=$HWID)
 
 if [ -z "$RESPONSE" ]; then
 	echo "No such HWID found in Database"
@@ -56,6 +46,6 @@ if [ ! -d "$DIR" ]; then
 	exit 1
 fi
 
-echo key \"$KEY\"\; > $DIR$MemberID_$HWID
+echo key \"$KEY\"\; > $DIR$HWID
 
 kill -HUP $(ps aux | grep fastd | grep $COMMUNITY | awk '{print $2}')
