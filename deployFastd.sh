@@ -46,6 +46,27 @@ if [ ! -d "$DIR" ]; then
 	exit 1
 fi
 
-echo key \"$KEY\"\; > $DIR$HWID
+KEY="key \"$KEY\"\;"
+
+if [ -f $DIR$HWID ]; then
+	if [ "$(cat $DIR$HWID)" == "$KEY" ]; then
+		echo "Keyfile with current Hash allready exist, exiting."
+		exit 0
+	else
+		REPLY="0000"
+		while [ "$REPLY" != 'yes' ]; do
+			if [ "$REPLY" != '0000' ]; then
+				echo "type 'yes' or 'no'!"
+			fi
+			echo "This Hardware-ID got already a keyfile for this town with different hash, overwrite? (yes/no)"
+			read -p "Are you sure? " -n 3 -r ; echo
+			if [ "$REPLY" == 'no' ]; then
+				exit 0
+			fi
+		done
+	fi
+fi
+
+echo $KEY > $DIR$HWID
 
 kill -HUP $(ps aux | grep fastd | grep $COMMUNITY | awk '{print $2}')
