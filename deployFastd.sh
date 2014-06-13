@@ -50,7 +50,7 @@ KEY="key \"$KEY\";"
 
 if [ -f $DIR$HWID ]; then
 	if [ "$(cat $DIR$HWID)" == "$KEY" ]; then
-		echo "Keyfile with current Hash allready exist, exiting."
+		echo "Keyfile with current Hash already exist, exiting."
 		exit 0
 	else
 		REPLY="00000"
