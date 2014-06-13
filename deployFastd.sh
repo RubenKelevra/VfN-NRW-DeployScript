@@ -46,7 +46,7 @@ if [ ! -d "$DIR" ]; then
 	exit 1
 fi
 
-KEY="key \"$KEY\"\;"
+KEY="key \"$KEY\";"
 
 if [ -f $DIR$HWID ]; then
 	if [ "$(cat $DIR$HWID)" == "$KEY" ]; then
