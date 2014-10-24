@@ -34,6 +34,11 @@ if [ -z "$KEY" ]; then
         exit 1
 fi
 
+if [ ${#KEY} -ne 64 ]; then
+	echo "Error: Fastd-public-key fetched from server was not valid."
+	exit 1
+fi
+
 if [ "$COMMUNITY" != "$COMMUNITY_EXPECTED" ]; then
 	echo "Error: Server said community is $COMMUNITY, you entered $COMMUNITY_EXPECTED, you have to fix the database."
 	exit 1
